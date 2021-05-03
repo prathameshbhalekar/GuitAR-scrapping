@@ -2,6 +2,9 @@ from bs4 import BeautifulSoup
 from selenium import webdriver
 from mongo import Mongo
 import logging as log
+from dotenv import load_dotenv
+load_dotenv()
+import os
 
 log.basicConfig(filename='app.log', filemode='w', format='%(name)s - %(levelname)s - %(message)s')
 
@@ -24,7 +27,9 @@ class Scrapper():
         options.add_argument('--ignore-certificate-errors')
         options.add_argument('--incognito')
         options.add_argument('--headless')
-        driver = webdriver.Chrome("C:\Program Files (x86)\chromedriver", chrome_options=options)
+
+        WEBDRIVER_LOCATION = os.environ.get("WEBDRIVER_LOCATION")
+        driver = webdriver.Chrome(WEBDRIVER_LOCATION, chrome_options=options)
         driver.get(url)
         soup = BeautifulSoup(driver.page_source, 'lxml')
         urls = soup.find_all('a', class_ =  '_3DU-x JoRLr _3dYeW')
